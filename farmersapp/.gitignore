@@ -8,3 +8,6 @@ __pycache__
 mdl.py
 migrations
 ../__init__
+farmers/__init__.py
+farmers/__pycache__/
+farmersapp/__init__.py
