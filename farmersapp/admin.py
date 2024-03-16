@@ -26,6 +26,19 @@ class AdminUser(admin.ModelAdmin):
 class AdminArea(admin.ModelAdmin):
     list_display = ['name', 'square', "user"]
     list_per_page = 20
+
+    
+    # Define custom action for adding expense
+    def add_expense_action(self, request, queryset):
+        for area in queryset:
+            # Add expense for each selected area
+            area.add_expense(amount=100,  description='Expense added via admin')
+
+    add_expense_action.short_description = "Add Expense"
+
+    # Register the custom action
+    actions = [add_expense_action]
+
     # fieldsets = [
     #     ('personal info',{
     #         'fields': ['create_date', 'description', 'update_date'],
@@ -57,42 +70,41 @@ class AdminIncome(admin.ModelAdmin):
 class AdminEquipment(admin.ModelAdmin):
     list_display = ["user",  'description', 'create_date', 'update_date']
 
-
-# @admin.register(CategoryEquipment)
-# class AdminCategoryEquipment(admin.ModelAdmin):
-#     list_display = ['name',  'description']
-
 @admin.register(Livestock)
 class LivestockAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Livestock._meta.fields]
-
-# @admin.register(CategoryLivestock)
-# class CategoryLivestockAdmin(admin.ModelAdmin):
-#     list_display = [field.name for field in CategoryLivestock._meta.fields]
-
-@admin.register(ExpenceCategory)
-class CategoryLivestockAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in ExpenceCategory._meta.fields]
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Category._meta.fields]
 
 
+@admin.register(AreaExpences)
+class AreaExpencesAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in AreaExpences._meta.fields]
 
-    
+@admin.register(EquipmentExpences)
+class EqipmentExpencesAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in EquipmentExpences._meta.fields]
 
-@admin.register(Writer)
-class CategoryWriter(admin.ModelAdmin):
-    list_display = [field.name for field in Writer._meta.fields]
+@admin.register(LivestockExpence)
+class LiveStockExpencesAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in LivestockExpence._meta.fields]
 
-    
-@admin.register(Article)
-class Article(admin.ModelAdmin):
-    list_display = [field.name for field in Article._meta.fields]
 
-    
+@admin.register(AreaIncome)
+class AreaIncomeAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in AreaIncome._meta.fields]
+    # Add more categories as needed
 
-    
+@admin.register(LivestockIncome)
+class LivestockIncomeAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in LivestockIncome._meta.fields]
+    # Add more categories as needed
 
-    
+@admin.register(EquipmentIncome)
+class EquipmentIncomeAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in EquipmentIncome._meta.fields]
+    # Add more categories as needed
+
+
