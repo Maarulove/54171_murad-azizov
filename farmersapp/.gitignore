@@ -1,13 +1,13 @@
-../farmers/__init__.py
-../farmers/__pycache__/__init__.cpython-310.pyc
-..farmers/__pycache__/settings.cpython-310.pyc
-../farmers/__pycache__/urls.cpython-310.pyc
-../farmers/__pycache__/wsgi.cpython-310.pyc
+# ../farmers/__init__.py
+# ../farmers/__pycache__/__init__.cpython-310.pyc
+# ..farmers/__pycache__/settings.cpython-310.pyc
+# ../farmers/__pycache__/urls.cpython-310.pyc
+# ../farmers/__pycache__/wsgi.cpython-310.pyc
 __init__
 __pycache__
 mdl.py
 migrations
 ../__init__
-farmers/__init__.py
-farmers/__pycache__/
-farmersapp/__init__.py
+__init__.py
+./__pycache__/
+../__init__.py

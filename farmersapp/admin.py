@@ -79,4 +79,20 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Category._meta.fields]
 
 
+
+    
+
+@admin.register(Writer)
+class CategoryWriter(admin.ModelAdmin):
+    list_display = [field.name for field in Writer._meta.fields]
+
+    
+@admin.register(Article)
+class Article(admin.ModelAdmin):
+    list_display = [field.name for field in Article._meta.fields]
+
+    
+
+    
+
     

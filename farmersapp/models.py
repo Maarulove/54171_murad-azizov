@@ -12,15 +12,15 @@ class Users(models.Model):
         return f"{self.name} {self.surname}"
     
 class Category(models.Model):
-    name = models.CharField(max_length=20)
+    def_name = models.CharField(max_length=20)
     slug = models.SlugField(max_length=20)
-    url = models.CharField("The URL", max_length=40)
+    # url = models.CharField("The URL", max_length=40)
     parent_category = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
     class Meta:
         ordering = ("pk",)
 
     def __str__(self):
-        return self.name
+        return self.def_name
 
     def __repr__(self):
         return self.__str__()
@@ -32,12 +32,12 @@ class Category(models.Model):
 #     def __str__(self):
 #         return self.name
     
-class Area(models.Model):
+class Area(Category):
     user = models.ForeignKey(Users, on_delete=models.CASCADE, default=1 )
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
     square = models.FloatField()
-    categories = models.ManyToManyField(Category, blank=True)
+    # categories = models.ManyToManyField(Category, blank=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 
@@ -101,7 +101,7 @@ class Expense(models.Model):
     ]
     user = models.ForeignKey(Users, on_delete=models.CASCADE) 
     where = models.CharField(max_length=50, choices=EXPENSE_CATEGORIES)
-    categories = models.ManyToManyField(ExpenceCategory, blank=True)
+    categories = models.ManyToManyField(Category, blank=True)
     description = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
