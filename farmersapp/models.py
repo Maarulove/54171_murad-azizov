@@ -6,12 +6,26 @@ class Users(models.Model):
     surname = models.CharField(max_length=50)
     email = models.EmailField()
     phone = models.CharField(max_length=20)
+    city = models.CharField(max_length=50)
+    country = models.CharField(max_length=50)
     create_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:   
         return f"{self.name} {self.surname}"
+        
+    def __repr__(self) -> str:
+        return self.__str__()   
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        return super().save(force_insert, force_update, using, update_fields)
     
-    
+
+class Login(models.Model):
+    username = models.CharField(max_length=100)
+    password = models.CharField(max_length=100)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.username
 
     
 class Category(models.Model):
@@ -46,7 +60,7 @@ class Expense(models.Model):
     
 
 class Area(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, default=1 )
+    # user = models.ForeignKey(Users, on_delete=models.CASCADE, default=1 )
     name = models.CharField(max_length=150)
     description = models.TextField(blank=True)
     square = models.FloatField()
@@ -103,7 +117,6 @@ class LivestockIncome(Income):
     livestock = models.ForeignKey(Livestock, on_delete=models.CASCADE)
 
 
-
 class Equipment(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)  # Assuming Users is defined elsewhere
     description = models.TextField(blank=True, null=True)  # Null is more appropriate for TextField default
@@ -114,4 +127,19 @@ class EquipmentExpences(Expense):
 class EquipmentIncome(Income):
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
 
+class Task(models.Model):
+    description = models.TextField()
+    due_date = models.DateField()
+    
+    status = models.CharField(max_length=20)
 
+
+class Weather(models.Model):
+    date = models.DateField(auto_now_add=True)
+    temperature = models.DecimalField(max_digits=5, decimal_places=2)
+    precipitation = models.TextField()
+    summary = models.TextField()
+    icon = models.ImageField(upload_to='../static/farmersapp/images', blank=True, null=True)
+
+    def __str__(self):
+        return f"Weather: {self.date}, tempreature: {self.temperature} C {self.icon}, precipitation: {self.precipitation}mm \nsummary: {self.summary}" 

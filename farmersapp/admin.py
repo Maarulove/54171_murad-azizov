@@ -4,7 +4,7 @@ from .models import *
 # Register your models here.
 @admin.register(Users)
 class AdminUser(admin.ModelAdmin):
-    list_display = ['name','surname', 'email', 'phone', 'create_date']
+    list_display = ['name','surname', 'email', 'phone', 'create_date', 'city', 'country']
     list_per_page = 100
 
     fieldsets = [
@@ -24,7 +24,7 @@ class AdminUser(admin.ModelAdmin):
 
 @admin.register(Area)
 class AdminArea(admin.ModelAdmin):
-    list_display = ['name', 'square', "user"]
+    list_display = ['name', 'square']
     list_per_page = 20
 
     

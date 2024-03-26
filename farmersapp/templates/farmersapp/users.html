@@ -1,14 +1,32 @@
-{% extends 'index.html' %}
+{% extends 'farmersapp/index.html' %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Document</title>
 </head>
 <body>
+    
+    {% block title %}Document{% endblock %}
     {% block content %}
-    {{ users }}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+        {% for index, user in enumerated_users %}
+        <p style="margin-top:1%; margin-bottom: 0; padding-bottom: 0%;">
+            User{{ index }}: {{ user }}
+        </p>
+    {% endfor %}
+    {% for user in users %}
+        <p style="margin-top:1%; margin-bottom: 0; padding-bottom: 0%;">
+            User: {{ user }}
+        </p>
+    {% endfor %}
+    
     {% endblock %}
+    
 </body>
 </html>

@@ -11,3 +11,9 @@ migrations
 __init__.py
 ./__pycache__/
 ../__init__.py
+2136_kool_form_pack/
+basend/
+farmers/__init__.py
+farmers/__pycache__/
+logfile.log
+static/
