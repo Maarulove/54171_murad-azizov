@@ -6,9 +6,13 @@
     <title>Your Site Title</title>
     <!-- Add your CSS files here -->
     {% load static %}
+    <!-- <link rel="stylesheet" href="{% static 'farmersapp/css/style.css' %}"> -->
     <link rel="stylesheet" href="{% static 'farmersapp/css/tooplate-kool-form-pack.css' %}">
 </head>
 <body>
+    <li><a href="{% url 'home' %}">Home</a></li>
+
+    {% block content %}
     <section>
         <p style="color: blanchedalmond;">
             <img src="https://openweathermap.org/img/wn/{{ icon }}@2x.png" alt=""> {{ name }}  {{ temperature }}°C <br>
@@ -49,18 +53,16 @@
                                         
                                         <ul>
                                             {% csrf_token %}
-                                            <li><a href="{% url 'home' %}">Home</a></li>
-                                            {% block content %}
                                         </ul>
                                                 <ul>
+                                                    <li><a href="{% url 'my_areas' %}">My fields</a></li>
                                                     
                                                 <!-- <li><a href="{% url 'login' %}">login</a></li> -->
-                                                <li><a href="{% url 'category_new' %}">Create Category</a></li>
+                                                <li><a href="{% url 'categories' %}">Category</a></li>
+                                                <li><a href="{% url 'equipment' %}">Equipments</a></li>
                                                 <li><a href="{% url 'income_new' %}">Create Income</a></li>
                                                 <li><a href="{% url 'expense_new' %}">Create Expense</a></li>
-                                                <li><a href="{% url 'area_new' %}">Create Area</a></li>
                                                 <li><a href="{% url 'livestock_new' %}">Create Livestock</a></li>
-                                                <li><a href="{% url 'equipment_new' %}">Create Equipment</a></li>
                                             </ul>
                                                 <a href="{% url 'login' %}">Sign-in</a>
                                             </li>

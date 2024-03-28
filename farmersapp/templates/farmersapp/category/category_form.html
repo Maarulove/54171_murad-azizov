@@ -1,0 +1,26 @@
+{% extends 'farmersapp/index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block content %}
+    {% load static %}
+
+    <title>Cattegories</title>
+</head>
+<body>
+    
+    <h1 class="my_areas_cl">Category Form</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  
+        <input type="submit" value="Submit">
+    </form>
+
+
+
+      {{ categories }}  
+</body>
+{% endblock %}
+</html>

@@ -28,7 +28,16 @@ class ExpenseForm(forms.ModelForm):
 class AreaForm(forms.ModelForm):
     class Meta:
         model = Area
-        fields = ['name', 'description', 'square', 'categories']
+        fields = ['location','name', 'square', 'price', 'categories', 'description',]
+        action = forms.CharField(widget=forms.HiddenInput(), initial='create')
+        widgets = {
+            'location': forms.TextInput(attrs={'placeholder': 'Enter location'}),
+            'name': forms.TextInput(attrs={'placeholder': 'Enter name'}),
+            'square': forms.NumberInput(attrs={'placeholder': 'Enter square'}),
+            'price': forms.NumberInput(attrs={'placeholder': 'Enter price'}),
+            'categories': forms.Select(attrs={'placeholder': 'Select categories'}),
+            'description': forms.TextInput(attrs={'placeholder': 'Short description (optional)'}),
+        }
 
 class LivestockForm(forms.ModelForm):
     class Meta:
@@ -38,7 +47,7 @@ class LivestockForm(forms.ModelForm):
 class EquipmentForm(forms.ModelForm):
     class Meta:
         model = Equipment
-        fields = ['user', 'description']
+        fields = ['name', 'categories', 'description']
 
 class LoginForm(forms.ModelForm):
     class Meta:

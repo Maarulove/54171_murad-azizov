@@ -61,15 +61,18 @@ class Expense(models.Model):
 
 class Area(models.Model):
     # user = models.ForeignKey(Users, on_delete=models.CASCADE, default=1 )
-    name = models.CharField(max_length=150)
-    description = models.TextField(blank=True)
-    square = models.FloatField()
+    name = models.CharField(max_length=150) 
+    description = models.TextField(blank=True, null=True)
+    square = models.FloatField(blank=True, null=True)
+    price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     categories = models.ManyToManyField(Category, blank=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 
     def __str__(self):
             return self.name
+            
     
     def add_expense(self, amount, description=''):
         # Assuming Expense is your Expense model
@@ -118,8 +121,10 @@ class LivestockIncome(Income):
 
 
 class Equipment(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)  # Assuming Users is defined elsewhere
-    description = models.TextField(blank=True, null=True)  # Null is more appropriate for TextField default
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, default='dsa')  # Assuming Users is defined elsewhere
+    categories = models.ManyToManyField(Category, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)  
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
 class EquipmentExpences(Expense):

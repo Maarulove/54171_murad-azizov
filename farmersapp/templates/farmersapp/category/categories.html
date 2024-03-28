@@ -1,0 +1,41 @@
+{% extends 'farmersapp/index.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block content %}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'farmersapp/css/style.css' %}">
+
+    <title>Cattegories</title>
+</head>
+<body class="categories">
+    
+    <h1>Categories</h1>
+    <table class="categories">
+        <tr class="categories">
+            <th>Category</th>
+            <th>Slug</th>
+            <th>Parent category</th>
+        </tr>
+        {% for area in categories %}
+        <tr class="my_areas_cl">
+            <td>{{ area.def_name }}</td>
+            <td>{{ area.slug }}</td>
+            <td>{{ area.parent_category}}</td>
+            <td>
+                <a href="{% url 'edit_cat' area.id %}">Edit</a>
+                <form action="{% url 'delete_cat' area.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this area?')">
+                    {% csrf_token %}
+                    <input type="submit" value="Delete">
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <li><a href="{% url 'category_new' %}">Create category</a></li>
+
+</body>
+{% endblock %}
+</html>

@@ -1,0 +1,27 @@
+{% extends 'farmersapp/equipment/equipment.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block content %}
+    {% load static %}
+
+    <title>Equipments</title>
+</head>
+<body>
+    
+    <h1 class="my_areas_cl">Equipment Form</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}  
+        <input type="submit" value="Submit">
+    </form>
+
+
+
+      {{ equipments }}  
+</body>
+{% endblock %}
+</html>

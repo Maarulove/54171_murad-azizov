@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+{% block content %}
+<html>
+<head>
+    <title>Area Form</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'farmersapp/css/style.css' %}">
+
+</head>
+<body >
+
+    <h1  class="my_areas_cl">Area Form</h1>
+    
+    <form action="" method="POST" class="form_area">
+        <!-- Add your form fields here -->
+        {% csrf_token %}
+
+        <label for="id_location" class="label_area">Location:</label>
+        {{ form.location }}
+        <br>
+        <label for="id_name" class="label_area">Name:</label>
+        {{ form.name }}
+        <br>
+        <label for="id_square" class="label_area">Square:</label>
+        {{ form.square }}
+        <br>
+        <label for="id_price" class="label_area">Price:</label>
+        {{ form.price }}
+        <br>
+        <label for="id_categories" class="label_area">Categories:</label>
+        {{ form.categories }}
+        <a href="{% url 'category_new' %}"   >➕</a> <br>
+        <br>
+        <label for="id_description" class="label_area">Description:</label>
+        {{ form.description }}
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    {% endblock %}
+</body>
+</html>

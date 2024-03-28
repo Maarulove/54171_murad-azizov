@@ -1,20 +1,14 @@
-<!DOCTYPE html>
 {% extends 'farmersapp/index.html' %}
 
+
 {% block content %}
-<html>
-<head>
-    <title>Area Form</title>
-</head>
-<body>
-    <h1>Area Form</h1>
-    
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'farmersapp/css/style.css' %}">
+
+    <h1 >Edit Area</h1>
     <form action="" method="POST">
-        <!-- Add your form fields here -->
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Submit">
     </form>
-    {% endblock %}
-</body>
-</html>
+{% endblock %}
