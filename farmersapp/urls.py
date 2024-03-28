@@ -1,10 +1,14 @@
 from django.urls import path
 from . import views
-
+from accounts import views as accounts_views
+# app_name = "farmersapp"
 urlpatterns = [
     
-    path("accounts/", views.login_view, name="login" ),
-    # path("home/", views.home, name="home"),
+    # path("accounts/", views.login_view, name="login" ),
+    path("farmersapphome/", views.home, name="home"),
+    path("", views.home, name="home"),
+    path("logout/", accounts_views.logout_view, name="logout"),
+    path("loginn/", accounts_views.login_view, name="loginn"),
     # path("get_users   /", views.get_users, name="get_users"),
     
     path("categories/", views.categories, name="categories"),
@@ -26,7 +30,6 @@ urlpatterns = [
     path("equipment_new/", views.create_equipment, name="equipment_new"),
     path("expense_new/", views.create_expense, name="expense_new"),
     path("income_new/", views.create_income, name="income_new"),
-    path("home/", views.home, name="home"),
     path("register/", views.register, name="register"),
 
 

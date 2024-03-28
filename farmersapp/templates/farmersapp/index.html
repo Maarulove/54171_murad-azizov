@@ -10,9 +10,9 @@
     <link rel="stylesheet" href="{% static 'farmersapp/css/tooplate-kool-form-pack.css' %}">
 </head>
 <body>
+    {% block content %}
     <li><a href="{% url 'home' %}">Home</a></li>
 
-    {% block content %}
     <section>
         <p style="color: blanchedalmond;">
             <img src="https://openweathermap.org/img/wn/{{ icon }}@2x.png" alt=""> {{ name }}  {{ temperature }}°C <br>
@@ -60,16 +60,19 @@
                                                 <!-- <li><a href="{% url 'login' %}">login</a></li> -->
                                                 <li><a href="{% url 'categories' %}">Category</a></li>
                                                 <li><a href="{% url 'equipment' %}">Equipments</a></li>
-                                                <li><a href="{% url 'income_new' %}">Create Income</a></li>
-                                                <li><a href="{% url 'expense_new' %}">Create Expense</a></li>
-                                                <li><a href="{% url 'livestock_new' %}">Create Livestock</a></li>
                                             </ul>
-                                                <a href="{% url 'login' %}">Sign-in</a>
-                                            </li>
-                                            
-                                            <li>
-                                                <a href="{% url 'register' %}">Create an account</a>
-                                            </li>
+                                            <a href="{% url 'login' %}">Sign-in</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'logout' %}">Logout</a>
+                                        </li>
+                                        
+                                        <li>
+                                            <a href="{% url 'register' %}">Create an account</a>
+                                        </li>
+                                        <li><a href="{% url 'income_new' %}">Create Income</a></li>
+                                        <li><a href="{% url 'expense_new' %}">Create Expense</a></li>
+                                        <li><a href="{% url 'livestock_new' %}">Create Livestock</a></li>
                                             
                                             <li>
                                                 <a href="password-reset.html">Password Reset</a>
