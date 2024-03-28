@@ -32,26 +32,14 @@ logger.addHandler(log_file)
 #     return render(request, 'registration/farmersapp/login.html', {'form': form})
 
 # farmers\farmersapp\templates\farmersapp\registration\login.html
-def login_view(request):
-    logger.info('login block started')
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            # Redirect to a success page.
-            return redirect('home')  # Change 'home' to the name of your homepage URL pattern
-        else:
-            # Return an 'invalid login' error message.
-            messages.error(request, 'Invalid username or password.')
-    return render(request, 'farmersapp/registration/login.html')
 
 
 
 def init(request):
     return render(request, 'farmersapp/login.html')
-@login_required
+
+
+@login_required 
 def home(request):
     return render(request, 'farmersapp/index.html',
                   {"icon": Update_weather.icon, 
@@ -61,6 +49,7 @@ def home(request):
                   'precipitation': Update_weather.precipitation,
                   'polygon_area': polygon_area(),
                   })
+
 
 def get_users(request):
     logger.info('Getting all users started')
