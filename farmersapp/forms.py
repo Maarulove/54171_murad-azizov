@@ -29,7 +29,7 @@ class AreaForm(forms.ModelForm):
     class Meta:
         model = Area
         fields = ['location','name', 'square', 'price', 'categories', 'description',]
-        action = forms.CharField(widget=forms.HiddenInput(), initial='create')
+        # action = forms.CharField(widget=forms.HiddenInput(), initial='create')
         widgets = {
             'location': forms.TextInput(attrs={'placeholder': 'Enter location'}),
             'name': forms.TextInput(attrs={'placeholder': 'Enter name'}),

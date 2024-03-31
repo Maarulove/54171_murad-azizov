@@ -6,7 +6,8 @@ import requests
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-
+from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
 
 
 
@@ -50,7 +51,7 @@ def home(request):
                   'polygon_area': polygon_area(),
                   })
 
-
+@login_required
 def get_users(request):
     logger.info('Getting all users started')
     if request.method == 'GET':
@@ -72,7 +73,7 @@ def get_users(request):
      
 #     all_users = Users.objects.all()
 #     return render(request, 'farmersapp/users.html', {'form': form, 'users': enumerate(all_users)})
-
+@login_required
 def register(request):
     logger.info('Creating a new user started')
     if request.method == "POST":
@@ -89,6 +90,7 @@ def register(request):
     all_users = Users.objects.all()
     return render(request, 'farmersapp/users.html', {'form': form, 'users': enumerate(all_users)})
 
+@login_required
 def my_areas(request):
     logger.info('Getting all areas started')
     if request.method == 'GET':
@@ -99,16 +101,24 @@ def my_areas(request):
         logger.info('Getting all areas else block started')
         form = AreaForm()
     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
-    
+
+
+@login_required
 def create_area(request):
     if request.method == 'POST':
         form = AreaForm(request.POST)
+        logger.info('Creating a new area started')
         if form.is_valid():
-            form.save()
+            logger.info('Area Form is valid')
+            area = form.save(commit=False)
+            area.user = request.user
+            area.save()
             return redirect('my_areas')
     else:
         form = AreaForm()
     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
+
+
 
 # def create_area(request):
 #     if request.method == 'POST':
@@ -126,7 +136,7 @@ def create_area(request):
 #     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
 
 #     # return render(request, 'create_area.html', {'form': form})
-
+@login_required
 def area_edit(request, id):
     area = Area.objects.get(id=id)
     if request.method == 'POST':
@@ -148,7 +158,7 @@ def delete_area(request, id):
 
 
 
-
+@login_required
 def categories(request):
     if request.method == 'GET':
         all_categories = Category.objects.all()
@@ -162,7 +172,8 @@ def create_category(request):
         form = CategoryForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('categories')
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+            # return redirect('categories')
     else:
         form = CategoryForm()
     return render(request, 'farmersapp/category/category_form.html', {'form': form})
