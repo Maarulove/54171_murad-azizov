@@ -11,6 +11,13 @@
 <body >
 
     <h1  class="my_areas_cl">Area Form</h1>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     
     <form action="" method="POST" class="form_area">
         <!-- Add your form fields here -->
@@ -30,7 +37,7 @@
         <br>
         <label for="id_categories" class="label_area">Categories:</label>
         {{ form.categories }}
-        <a href="{% url 'category_new' %}">➕</a> <br>
+        <a href="{% url 'profile:category_new' %}?next={{ request.path|urlencode }}">➕</a>
         <br>
         <label for="id_description" class="label_area">Description:</label>
         {{ form.description }}

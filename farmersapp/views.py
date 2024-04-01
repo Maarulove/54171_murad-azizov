@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, reverse
 from .forms import UserForm, CategoryForm,LoginForm, IncomeForm, ExpenseForm, AreaForm, LivestockForm, EquipmentForm
 import logging
 from .models import Users, Category, Income, Expense, Area, Livestock, Equipment, Login, Weather, Task
@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
-
+from urllib.parse import urlparse
 
 
 logger = logging.getLogger(__name__)
@@ -82,7 +82,7 @@ def register(request):
         if form.is_valid():
             logger.info('User Form is valid')
             form.save()
-            return redirect('login')
+            return redirect('profile:login')
     else:
         logger.info('Creating a new user else block started')
         form = UserForm()
@@ -113,7 +113,7 @@ def create_area(request):
             area = form.save(commit=False)
             area.user = request.user
             area.save()
-            return redirect('my_areas')
+            return redirect('profile:my_areas')
     else:
         form = AreaForm()
     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
@@ -143,7 +143,7 @@ def area_edit(request, id):
         form = AreaForm(request.POST, instance=area)
         if form.is_valid():
             form.save()
-            return redirect('my_areas')
+            return redirect('profile:my_areas')
     else:
         form = AreaForm(instance=area)
     return render(request, 'farmersapp/areas/edit_area.html', {'form': form})
@@ -152,7 +152,7 @@ def delete_area(request, id):
     area = Area.objects.get(id=id)
     if request.method == 'POST':
         area.delete()
-        return redirect('my_areas')
+        return redirect('profile:my_areas')
     return render(request, 'farmersapp/areas/my_areas.html', {'area': area})
 
 
@@ -168,12 +168,28 @@ def categories(request):
     return render(request, 'farmersapp/category/category_form.html', {'form': form})
 
 def create_category(request):
+    # referring_page = "/"
+    # referer_path = urlparse(referring_page).path.replace('/','')
+    referring_page = request.META.get('HTTP_REFERER', '/')
+    print(referring_page, 321)
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
-            # return redirect('categories')
+            try:
+                category = form.save(commit=False)
+                category.save()
+                form.save()
+                messages.success(request, 'category created successfully')
+                next = request.POST.get('next', '/')
+                return HttpResponseRedirect(next)
+                # return redirect(referring_page)
+                # return redirect('profile:categories')
+                # return redirect(reverse(f"profile:{referer_path}"))
+            except Exception as e:
+                logger.error(e)
+            # return render(request, 'my_template.html', {'referring_page': referring_page})
+        else:
+            logger.error('Form is not valid')
     else:
         form = CategoryForm()
     return render(request, 'farmersapp/category/category_form.html', {'form': form})
@@ -185,7 +201,7 @@ def edit_category(request, id):
         form = CategoryForm(request.POST, instance=category)
         if form.is_valid():
             form.save()
-            return redirect('categories')
+            return redirect('profile:categories')
     else:
         form = CategoryForm(instance=category)
     return render(request, 'farmersapp/category/edit_cat.html', {'form': form})
@@ -194,7 +210,7 @@ def delete_category(request, id):
     category = Category.objects.get(id=id)
     if request.method == 'POST':
         category.delete()
-        return redirect('categories')
+        return redirect('profile:categories')
     return render(request, 'farmersapp/category/categories.html', {'category': category})
 
 
@@ -219,7 +235,7 @@ def create_equipment(request):
             # logger.info(equipment.user)
             equipment.user = request.user
             equipment.save()
-            return redirect('equipment')
+            return redirect('profile:equipment')
     else:
         form = EquipmentForm()
     return render(request, 'farmersapp/equipment/equipment_form.html', {'form': form})
@@ -230,7 +246,7 @@ def edit_equipment(request, id):
         form = EquipmentForm(request.POST, instance=equipment)
         if form.is_valid():
             form.save()
-            return redirect('equipments')
+            return redirect('profile:equipments')
     else:
         form = EquipmentForm(instance=equipment)
     return render(request, 'farmersapp/equipment/edit_equipment.html', {'form': form})
@@ -239,7 +255,7 @@ def delete_equipment(request, id):
     equipment = Equipment.objects.get(id=id)
     if request.method == 'POST':
         equipment.delete()
-        return redirect('equipments')
+        return redirect('profile:equipments')
     return render(request, 'farmersapp/equipment/equipments.html', {'equipment': equipment})
 
 
@@ -248,7 +264,7 @@ def create_income(request):
         form = IncomeForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('incomes')
+            return redirect('profile:incomes')
     else:
         form = IncomeForm()
     return render(request, 'farmersapp/income_form.html', {'form': form})
@@ -258,7 +274,7 @@ def create_expense(request):
         form = ExpenseForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('expenses')
+            return redirect('profile:expenses')
     else:
         form = ExpenseForm()
     return render(request, 'farmersapp/expense_form.html', {'form': form})
@@ -269,7 +285,7 @@ def create_livestock(request):
         form = LivestockForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('livestocks')
+            return redirect('profile:livestocks')
     else:
         form = LivestockForm()
     return render(request, 'farmersapp/livestock_form.html', {'form': form})
