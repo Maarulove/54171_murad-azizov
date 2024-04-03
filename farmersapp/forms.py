@@ -1,10 +1,35 @@
 from django import forms
+from django.contrib.auth.models import User
 from .models import Users, Category, Income, Expense, Area, Livestock, Equipment, Login
+from django_select2.forms import ModelSelect2MultipleWidget, Select2MultipleWidget
+from django.core.exceptions import ValidationError
+
+
+
+
 
 class UserForm(forms.ModelForm):
+    def clean_username(self):
+    #     """Reject usernames that differ only in case."""
+    #     username = self.cleaned_data.get("username")
+    #     if (
+    #         username
+    #         and self._meta.model.objects.filter(username__iexact=username).exists()
+    #     ):
+    #         self._update_errors(
+    #             ValidationError(
+    #                 {
+    #                     "username": self.instance.unique_error_message(
+    #                         self._meta.model, ["username"]
+    #                     )
+    #                 }
+    #             )
+    #         )
+    #     else:
+            return username
     class Meta:
-        model = Users
-        fields = ['name', 'surname', 'email', 'phone', 'city', 'country']
+        model = User
+        fields = ['phone', 'avatar']
 
         widgets = {
             "date_publish": forms.DateInput(attrs={"class": "form-control", "type":'date'}),
@@ -29,16 +54,21 @@ class AreaForm(forms.ModelForm):
     class Meta:
         model = Area
         fields = ['location','name', 'square', 'price', 'categories', 'description',]
-        # action = forms.CharField(widget=forms.HiddenInput(), initial='create')
+        # categories = forms.ModelMultipleChoiceField(queryset=Category.objects.all(),
+        #                                              widget=ModelSelect2MultipleWidget(attrs={'placeholder': 'Select categories'}))
+
         widgets = {
             'location': forms.TextInput(attrs={'placeholder': 'Enter location'}),
             'name': forms.TextInput(attrs={'placeholder': 'Enter name'}),
             'square': forms.NumberInput(attrs={'placeholder': 'Enter square'}),
             'price': forms.NumberInput(attrs={'placeholder': 'Enter price'}),
-            'categories': forms.Select(attrs={'placeholder': 'Select categories'}),
+            # 'categories': Select2MultipleWidget(attrs={'placeholder': 'Select categories'}),
+            # 'categories': ModelSelect2MultipleWidget(attrs={'data-placeholder': 'Select categories'}),
+
             'description': forms.TextInput(attrs={'placeholder': 'Short description (optional)'}),
         }
 
+        
 class LivestockForm(forms.ModelForm):
     class Meta:
         model = Livestock

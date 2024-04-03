@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'farmersapp',
     'accounts',
+    'rest_framework',
+    'django_select2',
 ]
 
 MIDDLEWARE = [

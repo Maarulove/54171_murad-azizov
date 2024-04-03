@@ -37,6 +37,12 @@ logger.addHandler(log_file)
 
 
 def init(request):
+    # if not remember_me:
+    # # set session expiry to 0 seconds. So   it will automatically close the session after the browser is closed.
+    #     self.request.session.set_expiry(0)
+
+    #     # Set session as modified to force data updates/cookie to be saved.
+    #     self.request.session.modified = True
     return render(request, 'farmersapp/login.html')
 
 
@@ -90,35 +96,49 @@ def register(request):
     all_users = Users.objects.all()
     return render(request, 'farmersapp/users.html', {'form': form, 'users': enumerate(all_users)})
 
+# @login_required
+# def my_areas(request):
+#     logger.info('Getting all areas started')
+#     if request.method == 'GET':
+#         all_areas = Area.objects.all()
+#         return render(request, 'farmersapp/areas/my_areas.html', {'areas': all_areas})
+
+#     else:
+#         logger.info('Getting all areas else block started')
+#         form = AreaForm()
+#     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
 @login_required
 def my_areas(request):
-    logger.info('Getting all areas started')
+    logger.info('Getting areas for current user started')
     if request.method == 'GET':
-        all_areas = Area.objects.all()
-        return render(request, 'farmersapp/areas/my_areas.html', {'areas': all_areas})
-
+        current_user_areas = Area.objects.filter(user=request.user)
+        return render(request, 'farmersapp/areas/my_areas.html', {'areas': current_user_areas})
     else:
-        logger.info('Getting all areas else block started')
         form = AreaForm()
-    return render(request, 'farmersapp/areas/area_form.html', {'form': form})
-
+        return render(request, 'farmersapp/areas/area_form.html', {'form': form})
 
 @login_required
 def create_area(request):
     if request.method == 'POST':
         form = AreaForm(request.POST)
         logger.info('Creating a new area started')
+        logger.info(form.errors)
         if form.is_valid():
             logger.info('Area Form is valid')
             area = form.save(commit=False)
-            area.user = request.user
+            area.user = request.user  # Set the user field before saving
             area.save()
-            return redirect('profile:my_areas')
+            messages.success(request, 'Fields added successfully')
+            next_url = request.POST.get('next', '/')
+            if next_url: 
+                return HttpResponseRedirect(next_url)  
+            else:
+                return redirect('profile:my_areas')
+        else:
+            logger.error('Form is not valid')
     else:
         form = AreaForm()
     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
-
-
 
 # def create_area(request):
 #     if request.method == 'POST':
@@ -182,12 +202,8 @@ def create_category(request):
                 messages.success(request, 'category created successfully')
                 next = request.POST.get('next', '/')
                 return HttpResponseRedirect(next)
-                # return redirect(referring_page)
-                # return redirect('profile:categories')
-                # return redirect(reverse(f"profile:{referer_path}"))
             except Exception as e:
                 logger.error(e)
-            # return render(request, 'my_template.html', {'referring_page': referring_page})
         else:
             logger.error('Form is not valid')
     else:
@@ -231,11 +247,12 @@ def create_equipment(request):
         form = EquipmentForm(request.POST)
         if form.is_valid():
             equipment = form.save(commit=False)
-            # logger.info(equipment)
-            # logger.info(equipment.user)
             equipment.user = request.user
             equipment.save()
-            return redirect('profile:equipment')
+            messages.success(request, 'category created successfully')
+            next = request.POST.get('next', '/')
+            return HttpResponseRedirect(next)
+            # return redirect('profile:equipment')
     else:
         form = EquipmentForm()
     return render(request, 'farmersapp/equipment/equipment_form.html', {'form': form})

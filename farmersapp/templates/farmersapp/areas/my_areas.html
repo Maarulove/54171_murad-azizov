@@ -25,7 +25,11 @@
             {% for area in areas %}
             <tr class="my_areas_cl">
                 <td>{{ area.name }}</td>
-                <td>{{ area.categories }}</td>
+                <td>
+                    {% for category in area.categories.all %}
+                        {{ category.def_name }}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
                 <td>{{ area.location }}</td>
                 <td>{{ area.square }}</td>
                 <td>{{ area.price }}</td>

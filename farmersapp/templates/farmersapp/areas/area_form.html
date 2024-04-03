@@ -42,6 +42,7 @@
         <label for="id_description" class="label_area">Description:</label>
         {{ form.description }}
         <br>
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
         <input type="submit" value="Submit">
     </form>
     {% endblock %}

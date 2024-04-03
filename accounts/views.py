@@ -69,4 +69,4 @@ def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out.')
 
-    return redirect('login')  # Change 'login' to the name of your login URL pattern
+    return redirect('login')  

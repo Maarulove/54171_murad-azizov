@@ -1,24 +1,32 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 import logging
+from PIL import Image
 
 
 class Users(models.Model):
-    name = models.CharField(max_length=50)
-    surname = models.CharField(max_length=50)
-    email = models.EmailField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
     phone = models.CharField(max_length=20)
-    city = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
-    create_date = models.DateTimeField(auto_now_add=True)
+    avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
 
     def __str__(self) -> str:   
-        return f"{self.name} {self.surname}"
+        return f"{self.user.username}"
         
     def __repr__(self) -> str:
         return self.__str__()   
-    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        return super().save(force_insert, force_update, using, update_fields)
+    
+    def save(self, *args, **kwargs):
+        super().save()
+    
+        img = Image.open(self.avatar.path)
+
+        if img.height > 100 or img.width > 100:
+            new_img = (100, 100)
+            img.thumbnail(new_img)
+            img.save(self.avatar.path)
+
+
     
 class Farm(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -71,12 +79,12 @@ class Expense(models.Model):
     
 
 class Area(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='area', on_delete=models.CASCADE)
     name = models.CharField(max_length=150) 
     description = models.TextField(blank=True, null=True)
     square = models.FloatField(blank=True, null=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    categories = models.ManyToManyField(Category, blank=True)
+    categories = models.ManyToManyField(Category, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
