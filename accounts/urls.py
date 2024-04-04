@@ -6,7 +6,7 @@ from farmersapp import views as farmersapp_views
 app_name = 'accounts'
 
 urlpatterns = [
-    path('signup/', views.signup_view, name='signup'),
+    path('signup/', views.signup, name='signup'),
     path('profile/', farmersapp_views.home, name='home'),
 
 ]

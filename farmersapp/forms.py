@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .models import Users, Category, Income, Expense, Area, Livestock, Equipment, Login
 from django_select2.forms import ModelSelect2MultipleWidget, Select2MultipleWidget
 from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm
 
 
 
@@ -10,30 +11,42 @@ from django.core.exceptions import ValidationError
 
 class UserForm(forms.ModelForm):
     def clean_username(self):
-    #     """Reject usernames that differ only in case."""
-    #     username = self.cleaned_data.get("username")
-    #     if (
-    #         username
-    #         and self._meta.model.objects.filter(username__iexact=username).exists()
-    #     ):
-    #         self._update_errors(
-    #             ValidationError(
-    #                 {
-    #                     "username": self.instance.unique_error_message(
-    #                         self._meta.model, ["username"]
-    #                     )
-    #                 }
-    #             )
-    #         )
-    #     else:
+        """Reject usernames that differ only in case."""
+        username = self.cleaned_data.get("username")
+        if (
+            username
+            and self._meta.model.objects.filter(username__iexact=username).exists()
+        ):
+            self._update_errors(
+                ValidationError(
+                    {
+                        "username": self.instance.unique_error_message(
+                            self._meta.model, ["username"]
+                        )
+                    }
+                )
+            )
+        else:
             return username
-    class Meta:
-        model = User
-        fields = ['phone', 'avatar']
+    # class Meta:
+    #     model = User
+    #     fields = ['phone', 'avatar']
 
-        widgets = {
-            "date_publish": forms.DateInput(attrs={"class": "form-control", "type":'date'}),
-        }
+    #     widgets = {
+    #         "date_publish": forms.DateInput(attrs={"class": "form-control", "type":'date'}),
+    #     }
+
+
+class SignUpForm(UserCreationForm):
+                 email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
+                 class Meta:
+                     model = User
+                     fields = ('username', 'email', 'password1', 'password2')
+
+
+
+
+
 
 class CategoryForm(forms.ModelForm):
     class Meta:

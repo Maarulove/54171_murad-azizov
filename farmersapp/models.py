@@ -29,7 +29,7 @@ class Users(models.Model):
 
     
 class Farm(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=255)
     size = models.PositiveIntegerField(help_text="Size of the farm in acres")
@@ -48,6 +48,7 @@ class Login(models.Model):
 
     
 class Category(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     def_name = models.CharField(max_length=20)
     slug = models.SlugField(max_length=20)
     # url = models.CharField("The URL", max_length=40)
@@ -62,14 +63,14 @@ class Category(models.Model):
         return self.__str__()
 
 class Income(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     description = models.TextField(blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
     categories = models.ManyToManyField(Category, blank=True)
 
 class Expense(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     description = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
@@ -79,7 +80,7 @@ class Expense(models.Model):
     
 
 class Area(models.Model):
-    user = models.ForeignKey(User, related_name='area', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=150) 
     description = models.TextField(blank=True, null=True)
     square = models.FloatField(blank=True, null=True)
@@ -125,7 +126,7 @@ class Livestock(models.Model):
     (10, "Bees"),
     # Add more categories as needed
     )
-    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=100)
     categories = models.CharField(max_length=100, choices=LIVESTOCK_CATEGORY_CHOICES)
     description = models.TextField(blank=True)
@@ -140,7 +141,7 @@ class LivestockIncome(Income):
 
 
 class Equipment(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=50, default='dsa')  # Assuming Users is defined elsewhere
     categories = models.ManyToManyField(Category, blank=True, null=True)
     description = models.TextField(blank=True, null=True)  

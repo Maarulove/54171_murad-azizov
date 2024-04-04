@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, reverse
-from .forms import UserForm, CategoryForm,LoginForm, IncomeForm, ExpenseForm, AreaForm, LivestockForm, EquipmentForm
+from .forms import UserForm, CategoryForm,LoginForm, IncomeForm, ExpenseForm, AreaForm, LivestockForm, \
+    EquipmentForm
 import logging
 from .models import Users, Category, Income, Expense, Area, Livestock, Equipment, Login, Weather, Task
 import requests
@@ -18,23 +19,6 @@ logger.addHandler(log_file)
 
 
 
-# def login(request):
-#     logger.info('login block started')
-
-#     if request.method == 'POST':
-#         logger.info('login if block started')
-#         form = LoginForm(request.POST)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('home')
-#     else:
-#         logger.info('login else block started')
-#         form = LoginForm()
-#     return render(request, 'registration/farmersapp/login.html', {'form': form})
-
-# farmers\farmersapp\templates\farmersapp\registration\login.html
-
-
 
 def init(request):
     # if not remember_me:
@@ -43,10 +27,10 @@ def init(request):
 
     #     # Set session as modified to force data updates/cookie to be saved.
     #     self.request.session.modified = True
-    return render(request, 'farmersapp/login.html')
+    return render(request, 'accounts/login.html')
 
 
-@login_required 
+@login_required  
 def home(request):
     return render(request, 'farmersapp/index.html',
                   {"icon": Update_weather.icon, 
@@ -64,38 +48,7 @@ def get_users(request):
         all_users = Users.objects.all()
         return render(request, 'farmersapp/users.html', {'users': all_users})
      
-# def create_user(request):
-#     logger.info('Creating a new user started')
-#     if request.method == "POST":
-#         logger.info('Creating a new user if block started')
-#         form = UserForm(request.POST)
-#         if form.is_valid():
-#             logger.info('User Form is valid')
-#             form.save()
-#             return redirect('init')
-#     else:
-#         logger.info('Creating a new user else block started')
-#         form = UserForm()
      
-#     all_users = Users.objects.all()
-#     return render(request, 'farmersapp/users.html', {'form': form, 'users': enumerate(all_users)})
-@login_required
-def register(request):
-    logger.info('Creating a new user started')
-    if request.method == "POST":
-        logger.info('Creating a new user if block started')
-        form = UserForm(request.POST)
-        if form.is_valid():
-            logger.info('User Form is valid')
-            form.save()
-            return redirect('profile:login')
-    else:
-        logger.info('Creating a new user else block started')
-        form = UserForm()
-     
-    all_users = Users.objects.all()
-    return render(request, 'farmersapp/users.html', {'form': form, 'users': enumerate(all_users)})
-
 # @login_required
 # def my_areas(request):
 #     logger.info('Getting all areas started')
@@ -181,33 +134,43 @@ def delete_area(request, id):
 @login_required
 def categories(request):
     if request.method == 'GET':
-        all_categories = Category.objects.all()
+
+        all_categories = Category.objects.filter(user=request.user)
         return render(request, 'farmersapp/category/categories.html', {'categories': all_categories})
     else:
         form = CategoryForm()
     return render(request, 'farmersapp/category/category_form.html', {'form': form})
 
 def create_category(request):
-    # referring_page = "/"
-    # referer_path = urlparse(referring_page).path.replace('/','')
-    referring_page = request.META.get('HTTP_REFERER', '/')
-    print(referring_page, 321)
+    # referring_page = request.META.get('HTTP_REFERER', '/')
+    # print(referring_page, 321)
     if request.method == 'POST':
         form = CategoryForm(request.POST)
         if form.is_valid():
-            try:
-                category = form.save(commit=False)
-                category.save()
-                form.save()
-                messages.success(request, 'category created successfully')
-                next = request.POST.get('next', '/')
-                return HttpResponseRedirect(next)
-            except Exception as e:
-                logger.error(e)
+            category = form.save(commit=False)
+            category.save()
+            form.save()
+            # messages.success(request, 'category created successfully')
+            # next = request.POST.get('next', '/')
+            # return HttpResponseRedirect(next)
+            # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+            next = request.GET.get('next', '/')
+            nextt = next
+            return HttpResponseRedirect(nextt)
+            next_url = request.POST.get('next', '/')
+            if 'next' in request.GET:
+                return redirect(request.GET['next'])
+            else:
+                return redirect('profile:home')
+
         else:
             logger.error('Form is not valid')
     else:
         form = CategoryForm()
+        # if 'next' in request.GET:
+        #     return redirect(request.GET['next'])
+        # else:
+        #     return redirect('profile:home')
     return render(request, 'farmersapp/category/category_form.html', {'form': form})
 
 

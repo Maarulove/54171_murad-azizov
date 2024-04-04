@@ -17,13 +17,14 @@
         {% endfor %}
     </ul>
     {% endif %}
-    
+    <button onclick="history.back()">Go Back</button>
+
     <h1 class="my_areas_cl">Category Form</h1>
-    <form action="{% url 'profile:category_new' %}" method="post">
+    <form action="{% url 'profile:category_new' %}?next={{ request.path|urlencode }}" method="post">
         {% csrf_token %}
         {{ form.as_p }}  
-        <input type="hidden" name="next" value="{{ request.GET.next }}">
-        <button type="submit">Submit</button>
+        <a href="{% url 'profile:category_new' %}?next={{ request.path|urlencode }}">➕ </a>
+        <button type="submit"  onclick="history.go(-3)"">Submit</button>
     </form>
 
 

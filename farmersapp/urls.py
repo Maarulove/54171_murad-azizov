@@ -8,8 +8,8 @@ urlpatterns = [
     path("farmersapphome/", views.home, name="home"),
     path("", views.home, name="home"),
     path("logout/", accounts_views.logout_view, name="logout"),
-    path("loginn/", accounts_views.login_view, name="loginn"),
-    # path("get_users   /", views.get_users, name="get_users"),
+    path("login/", accounts_views.login_view, name="login"),
+    path("register/", accounts_views.signup, name="register"),
     
     path("categories/", views.categories, name="categories"),
     path("category_new/", views.create_category, name="category_new"),
@@ -30,7 +30,6 @@ urlpatterns = [
     path("equipment_new/", views.create_equipment, name="equipment_new"),
     path("expense_new/", views.create_expense, name="expense_new"),
     path("income_new/", views.create_income, name="income_new"),
-    path("register/", views.register, name="register"),
 
 
     path("weather/", views.Update_weather, name="weather"),

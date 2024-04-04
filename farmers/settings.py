@@ -126,7 +126,7 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-LOGIN_URL = 'accounts:login'  # Adjust the URL name as per your actual URL pattern
+LOGIN_URL = 'profile:login'  # Adjust the URL name as per your actual URL pattern
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
