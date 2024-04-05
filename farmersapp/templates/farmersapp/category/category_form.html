@@ -20,7 +20,7 @@
     <button onclick="history.back()">Go Back</button>
 
     <h1 class="my_areas_cl">Category Form</h1>
-    <form action="{% url 'profile:category_new' %}?next={{ request.path|urlencode }}" method="post">
+    <form action="{% url 'profile:category_new' %}" method="post">
         {% csrf_token %}
         {{ form.as_p }}  
         <a href="{% url 'profile:category_new' %}?next={{ request.path|urlencode }}">➕ </a>
