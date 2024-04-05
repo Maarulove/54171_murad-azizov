@@ -60,7 +60,7 @@ class Category(models.Model):
         return self.def_name
 
     def __repr__(self):
-        return self.__str__()
+        return self.__str__ ()
 
 class Income(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
@@ -141,12 +141,14 @@ class LivestockIncome(Income):
 
 
 class Equipment(models.Model):
-    user = models.ForeignKey(Users, on_delete=models.CASCADE, default=1)
-    name = models.CharField(max_length=50, default='dsa')  # Assuming Users is defined elsewhere
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    name = models.CharField(max_length=50, default='Equipment')  # Assuming Users is defined elsewhere
     categories = models.ManyToManyField(Category, blank=True, null=True)
     description = models.TextField(blank=True, null=True)  
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+
+
 class EquipmentExpences(Expense):
     equipment = models.ForeignKey(Equipment, on_delete=models.CASCADE)
 class EquipmentIncome(Income):

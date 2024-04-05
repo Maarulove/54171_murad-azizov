@@ -2,13 +2,26 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from farmersapp.models import Users
 
 class SignUpForm(UserCreationForm):
     email = forms.EmailField(max_length=254, help_text='Required. Inform a valid email address.')
-    
+    phone = forms.CharField(max_length=20, required=False)
+    avatar = forms.ImageField(required=False)
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ('username', 'password1', 'password2', 'phone', 'avatar',)
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+        user_profile = Users.objects.create(user=user, phone=self.cleaned_data['phone'], avatar=self.cleaned_data['avatar'])
+        return user
+
+
+
+
 
 
 class UserForm(forms.ModelForm):
