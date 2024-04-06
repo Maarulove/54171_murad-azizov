@@ -46,7 +46,7 @@ def init(request):
     return render(request, 'farmersapp/login.html')
 
 
-@login_required 
+# @login_required 
 def home(request):
     return render(request, 'farmersapp/index.html',
                   {"icon": Update_weather.icon, 
@@ -107,7 +107,7 @@ def register(request):
 #         logger.info('Getting all areas else block started')
 #         form = AreaForm()
 #     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
-@login_required
+# @login_required
 def my_areas(request):
     logger.info('Getting areas for current user started')
     if request.method == 'GET':
@@ -373,8 +373,8 @@ class Update_weather:
     precipitation = data['current']['weather'][0]['description']
     name = name
     
-    weather = Weather(temperature=temperature, precipitation=precipitation, summary=summary, icon=icon)
-    weather.save()
+    # weather = Weather(temperature=temperature, precipitation=precipitation, summary=summary, icon=icon)
+    # weather.save()
 
 
 def polygon_area():
