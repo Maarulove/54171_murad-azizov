@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
 ]
 
-
+CRISPY_TEMPLATE_PACK = 'uni_form'
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'rest_framework',
     'django_select2',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [

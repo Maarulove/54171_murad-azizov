@@ -1,11 +1,11 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.contrib import messages
+# from django.shortcuts import render, redirect
+# from django.contrib.auth import authenticate, login
+# from django.contrib import messages
 from django.contrib.auth import logout
-from django.urls import reverse
-from .forms import UserCreationForm, SignUpForm, UserForm
+# from django.urls import reverse
+# from .forms import UserCreationForm, SignUpForm, UserForm
 import logging
-from django.contrib.auth import login as auth_login_user
+# from django.contrib.auth import login as auth_login_user
 
 
 
@@ -23,63 +23,107 @@ log_file.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 log_file.setFormatter(formatter)
 
-# Add the file handler to the logger
-logger.addHandler(log_file)
+# # Add the file handler to the logger
+# logger.addHandler(log_file)
 
 
 
-def login_view(request):
-    logger.info("login view is called.")
+# def login_view(request):
+#     logger.info("login view is called.")
 
-    if request.method == 'POST':
-        logger.info("Login view is called.")
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            logger.info("User is authenticated.")
-            login(request, user)
-            # Redirect to a success page.
-            return redirect(reverse('profile:home'))
-            redirect('login')
-        else:
-            # Return an 'invalid login' error message.
-            messages.error(request, 'Invalid username or password.')
-    return render(request, 'registration/login.html')
-
-# def signup_view(request):
-#     logger.info("Signup view is called.")
 #     if request.method == 'POST':
-#         logger.info("Signup view is called.")
+#         logger.info("Login view is called.")
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+#         user = authenticate(request, username=username, password=password)
+#         if user is not None:
+#             logger.info("User is authenticated.")
+#             login(request, user)
+#             # Redirect to a success page.
+#             return redirect(reverse('profile:home'))
+#             redirect('login')
+#         else:
+#             # Return an 'invalid login' error message.
+#             messages.error(request, 'Invalid username or password.')
+#     return render(request, 'registration/login.html')
+
+# # def signup_view(request):
+# #     logger.info("Signup view is called.")
+# #     if request.method == 'POST':
+# #         logger.info("Signup view is called.")
+# #         form = UserCreationForm(request.POST)
+# #         if form.is_valid():
+# #             logger.info("User creation form is valid.")
+# #             user = form.save()
+# #             login(request, user)
+# #             return redirect('login')  
+# #         else:
+# #             messages.error(request, 'Invalid form submission.')
+# #     else:
+# #         form = UserCreationForm()
+# #     return render(request, 'registration/signup.html', {'form': form})
+
+
+
+
+# def signup(request):
+#     if request.method == 'POST':
+
 #         form = UserCreationForm(request.POST)
 #         if form.is_valid():
-#             logger.info("User creation form is valid.")
 #             user = form.save()
-#             login(request, user)
-#             return redirect('login')  
-#         else:
-#             messages.error(request, 'Invalid form submission.')
+#             auth_login_user(request, user)
+#             return redirect('login')
 #     else:
-#         form = UserCreationForm()
-#     return render(request, 'registration/signup.html', {'form': form})
+#         #form = UserCreationForm()
+#         form = SignUpForm()
+#     return render(request, 'registration/signup.html', {'form':form})
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserRegisterForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Your account has been created! You are now able to log in')
+            return redirect('login')
+    else:
+        form = UserRegisterForm()
+    return render(request, 'users/register.html', {'form': form})
+
+
+@login_required
+def login_view(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, f'Your account has been updated!')
+            return redirect('profile')
+
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+
+    return render(request, 'users/profile.html', context)
 
 def logout_view(request):
     logout(request)
     messages.success(request, 'You have been logged out.')
 
     return redirect('login')  
-
-
-def signup(request):
-    if request.method == 'POST':
-
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            auth_login_user(request, user)
-            return redirect('login')
-    else:
-        #form = UserCreationForm()
-        form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form':form})
