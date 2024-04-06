@@ -128,10 +128,11 @@ class Livestock(models.Model):
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     name = models.CharField(max_length=100)
-    categories = models.CharField(max_length=100, choices=LIVESTOCK_CATEGORY_CHOICES)
+    category = models.CharField(max_length=100, choices=LIVESTOCK_CATEGORY_CHOICES, default=1)
+    categories = models.ManyToManyField(Category, blank=True, null=True, default=None)
     description = models.TextField(blank=True)
     quantity = models.IntegerField()
-    money_spent = models.DecimalField(default=0, max_digits=30, decimal_places=2)
+    money_spent = models.DecimalField(default=0, max_digits=30, decimal_places=2, blank=True, null=True)
 
 class LivestockExpence(Expense):
     livestock = models.ForeignKey(Livestock, on_delete=models.CASCADE)

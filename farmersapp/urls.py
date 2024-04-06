@@ -27,6 +27,10 @@ urlpatterns = [
     path("delete_equipment/<int:id>/", views.delete_equipment, name="delete_equipment"),
 
     path("livestock_new/", views.create_livestock, name="livestock_new"),
+    path("livestock/", views.livestock, name="livestock"),
+    path("edit_livestock/<int:id>/", views.edit_livestock, name="edit_livestock"),
+    path("delete_livestock/<int:id>/", views.delete_livestock, name="delete_livestock"),
+
     path("equipment_new/", views.create_equipment, name="equipment_new"),
     path("expense_new/", views.create_expense, name="expense_new"),
     path("income_new/", views.create_income, name="income_new"),

@@ -86,6 +86,13 @@ class LivestockForm(forms.ModelForm):
     class Meta:
         model = Livestock
         fields = ['name', 'categories', 'description', 'quantity', 'money_spent']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Enter name'}),
+            'quantity': forms.NumberInput(attrs={'placeholder': 'Enter square'}),
+            'money_spent': forms.NumberInput(attrs={'placeholder': 'Enter price'}),
+            'description': forms.TextInput(attrs={'placeholder': 'Short description (optional)'}),
+        }
+
 
 class EquipmentForm(forms.ModelForm):
     class Meta:

@@ -152,6 +152,8 @@ def area_edit(request, id):
             return redirect('profile:my_areas')
     else:
         form = AreaForm(instance=area)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+
     return render(request, 'farmersapp/areas/edit_area.html', {'form': form})
 
 def delete_area(request, id):
@@ -209,7 +211,8 @@ def edit_category(request, id):
             form.save()
             return redirect('profile:categories')
     else:
-        form = CategoryForm(instance=category)
+        form = CategoryForm(instance=category)  
+        form.fields['parent_category'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'farmersapp/category/edit_cat.html', {'form': form})
 
 def delete_category(request, id):
@@ -263,6 +266,7 @@ def edit_equipment(request, id):
             return redirect('profile:equipments')
     else:
         form = EquipmentForm(instance=equipment)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'farmersapp/equipment/edit_equipment.html', {'form': form})
 
 def delete_equipment(request, id):
@@ -294,15 +298,56 @@ def create_expense(request):
     return render(request, 'farmersapp/expense_form.html', {'form': form})
 
 
+def livestock(request):
+    if request.method == 'GET':
+        user_livestock = Livestock.objects.filter(user=request.user)
+        return render(request, 'farmersapp/livestock/livestock.html', {'livestock': user_livestock})
+    else:
+        form = LivestockForm()
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+        
+    return render(request, 'farmersapp/livestock/livestock.html', {'form': form})
+
+
 def create_livestock(request):
     if request.method == 'POST':
         form = LivestockForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('profile:livestocks')
+            lvst = form.save(commit=False)
+            lvst.user = request.user
+            lvst.save()
+            form.save_m2m()
+            next_url = request.GET.get('next', None)
+            if next_url:
+                return redirect(next_url)   
+            else:
+                return redirect('profile:categories')
     else:
         form = LivestockForm()
-    return render(request, 'farmersapp/livestock_form.html', {'form': form})
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+    return render(request, 'farmersapp/livestock/livestock_form.html', {'form': form})
+
+def edit_livestock(request, id):
+    livestock = Livestock.objects.get(id=id)
+    if request.method == 'POST':
+        form = LivestockForm(request.POST, instance=livestock)
+        if form.is_valid():
+            lvst = form.save(commit=False)
+            lvst.user = request.user
+            lvst.save()
+            form.save_m2m()
+            return redirect('profile:livestock')
+    else:
+        form = LivestockForm(instance=livestock)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+    return render(request, 'farmersapp/livestock/edit_livestock.html', {'form': form})
+    
+def delete_livestock(request, id):
+    livestock = Livestock.objects.get(id=id)
+    if request.method == 'POST':
+        livestock.delete()
+        return redirect('profile:livestock')
+    return render(request, 'farmersapp/livestock/livestock.html', {'livestock': livestock})
 
 def get_lat_lng(city_name):
     # https://openweathermap.org/api/geocoding-api
@@ -316,7 +361,7 @@ def get_lat_lng(city_name):
 class Update_weather:
     API_KEY = 'b5fc99d5de9b9472ce9bd0f9a7a533db'
     lat, lon, name =  get_lat_lng('zaqatala')
-    lang = 'az'
+    lang = 'en'
     
     response = requests.get(f'https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&appid={API_KEY}&lang={lang}')
 
