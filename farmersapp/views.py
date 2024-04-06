@@ -174,7 +174,7 @@ def categories(request):
     else:
         form = CategoryForm()
     return render(request, 'farmersapp/category/category_form.html', {'form': form})
-
+@login_required
 def create_category(request):
     # referring_page = "/"
     # referer_path = urlparse(referring_page).path.replace('/','')
@@ -202,7 +202,7 @@ def create_category(request):
         form.fields['parent_category'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'farmersapp/category/category_form.html', {'form': form})
 
-
+@login_required
 def edit_category(request, id):
     category = Category.objects.get(id=id)
     if request.method == 'POST':
@@ -223,7 +223,7 @@ def delete_category(request, id):
     return render(request, 'farmersapp/category/categories.html', {'category': category})
 
 
-
+@login_required
 def equipments(request):
     if request.method == 'GET':
         user_equipments = Equipment.objects.filter(user=request.user)
@@ -256,14 +256,14 @@ def create_equipment(request):
         form = EquipmentForm()
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'farmersapp/equipment/equipment_form.html', {'form': form})
-    
+@login_required
 def edit_equipment(request, id):
     equipment = Equipment.objects.get(id=id)
     if request.method == 'POST':
         form = EquipmentForm(request.POST, instance=equipment)
         if form.is_valid():
             form.save()
-            return redirect('profile:equipments')
+            return redirect('profile:equipment')
     else:
         form = EquipmentForm(instance=equipment)
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
@@ -297,7 +297,7 @@ def create_expense(request):
         form = ExpenseForm()
     return render(request, 'farmersapp/expense_form.html', {'form': form})
 
-
+@login_required
 def livestock(request):
     if request.method == 'GET':
         user_livestock = Livestock.objects.filter(user=request.user)
@@ -308,7 +308,7 @@ def livestock(request):
         
     return render(request, 'farmersapp/livestock/livestock.html', {'form': form})
 
-
+@login_required
 def create_livestock(request):
     if request.method == 'POST':
         form = LivestockForm(request.POST)
@@ -326,7 +326,7 @@ def create_livestock(request):
         form = LivestockForm()
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'farmersapp/livestock/livestock_form.html', {'form': form})
-
+@login_required
 def edit_livestock(request, id):
     livestock = Livestock.objects.get(id=id)
     if request.method == 'POST':
