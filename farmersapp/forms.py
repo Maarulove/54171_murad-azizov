@@ -56,12 +56,27 @@ class CategoryForm(forms.ModelForm):
 class IncomeForm(forms.ModelForm):
     class Meta:
         model = Income
-        fields = ['user', 'description', 'amount', 'categories']
+        fields = ["amount",
+                  "description",
+                  'categories'
+                  ]
+        widgets = {
+            'amount': forms.NumberInput(attrs={'placeholder': 'Enter amount of expense'}),
+            'description': forms.TextInput(attrs={'placeholder': 'where did you spend money?'}),
+            }
 
 class ExpenseForm(forms.ModelForm):
     class Meta:
         model = Expense
-        fields = ['user', 'description', 'amount']
+        fields = ["amount",
+                  "description",
+                  'categories'
+                  ]
+        widgets = {
+            'amount': forms.NumberInput(attrs={'placeholder': 'Enter amount of expense'}),
+            'description': forms.TextInput(attrs={'placeholder': 'where did you spend money?'}),
+            }
+
 
 class AreaForm(forms.ModelForm):
     class Meta:
@@ -88,7 +103,7 @@ class LivestockForm(forms.ModelForm):
         fields = ['name', 'categories', 'description', 'quantity', 'money_spent']
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter name'}),
-            'quantity': forms.NumberInput(attrs={'placeholder': 'Enter square'}),
+            'quantity': forms.NumberInput(attrs={'placeholder': 'Enter quantity'}),
             'money_spent': forms.NumberInput(attrs={'placeholder': 'Enter price'}),
             'description': forms.TextInput(attrs={'placeholder': 'Short description (optional)'}),
         }

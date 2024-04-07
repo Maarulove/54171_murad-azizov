@@ -74,6 +74,7 @@ class Expense(models.Model):
     description = models.TextField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     create_date = models.DateTimeField(auto_now_add=True)
+    categories = models.ManyToManyField(Category, blank=True)
 
     def __str__(self):
         return f"Expense {self.id}"
@@ -87,8 +88,8 @@ class Area(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     categories = models.ManyToManyField(Category, blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
-    create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(auto_now=True)
+    create_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
             return self.name
@@ -133,6 +134,8 @@ class Livestock(models.Model):
     description = models.TextField(blank=True)
     quantity = models.IntegerField()
     money_spent = models.DecimalField(default=0, max_digits=30, decimal_places=2, blank=True, null=True)
+    create_date = models.DateTimeField(auto_now_add=True)
+    update_date = models.DateTimeField(auto_now=True)
 
 class LivestockExpence(Expense):
     livestock = models.ForeignKey(Livestock, on_delete=models.CASCADE)

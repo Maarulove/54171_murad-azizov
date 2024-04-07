@@ -15,18 +15,24 @@
     <h1>Equipments</h1>
     <table class="categories">
         <tr class="categories">
-            <th>user</th>
+            <th>name</th>
+            <th>quantity </th>
+            <th>price </th>
+            <th>category</th>
+            <th>date</th>
             <th>description</th>
-            <th>create_date </th>
         </tr>
-        {% for area in equipments %}
+        {% for lvst in livestock %}
         <tr class="my_areas_cl">
-            <td>{{ area.user }}</td>
-            <td>{{ area.description }}</td>
-            <td>{{ area.create_date}}</td>
+            <td>{{ lvst.name }}</td>
+            <td>{{ lvst.quantity }}</td>
+            <td>{{ lvst.money_spent }}</td>
+            <td>{{ lvst.category }}</td>
+            <td>{{ lvst.create_date }}</td>
+            <td>{{ lvst.description }}</td>
             <td>
-                <a href="{% url 'profile:edit_equipment' area.id %}">Edit</a>
-                <form action="{% url 'profile:delete_equipment' area.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this area?')">
+                <a href="{% url 'profile:edit_livestock' lvst.id %}">Edit</a>
+                <form action="{% url 'profile:delete_livestock' lvst.id %}" method="post" onsubmit="return confirm('Are you sure you want to delete this area?')">
                     {% csrf_token %}
                     <input type="submit" value="Delete">
                 </form>
@@ -34,7 +40,7 @@
         </tr>
         {% endfor %}
     </table>
-    <li><a href="{% url 'profile:create_equipment' %}">New equipment</a></li>
+    <li><a href="{% url 'profile:create_livestock' %}">New equipment</a></li>
 
 </body>
 {% endblock %}

@@ -107,6 +107,9 @@ def register(request):
 #         logger.info('Getting all areas else block started')
 #         form = AreaForm()
 #     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
+
+
+#################### Areas ####################
 @login_required
 def my_areas(request):
     logger.info('Getting areas for current user started')
@@ -121,6 +124,7 @@ def my_areas(request):
 def create_area(request):
     if request.method == 'POST':
         form = AreaForm(request.POST)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
         logger.info('Creating a new area started')
         logger.info(form.errors)
         if form.is_valid():
@@ -147,6 +151,7 @@ def area_edit(request, id):
     area = Area.objects.get(id=id)
     if request.method == 'POST':
         form = AreaForm(request.POST, instance=area)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
         if form.is_valid():
             form.save()
             return redirect('profile:my_areas')
@@ -165,7 +170,7 @@ def delete_area(request, id):
 
 
 
-
+#################### Categories ####################
 @login_required
 def categories(request):
     if request.method == 'GET':
@@ -223,7 +228,7 @@ def delete_category(request, id):
     return render(request, 'farmersapp/category/categories.html', {'category': category})
 
 
-
+#################### Equipments ####################
 def equipments(request):
     if request.method == 'GET':
         user_equipments = Equipment.objects.filter(user=request.user)
@@ -248,7 +253,7 @@ def create_equipment(request):
             if next_url:
                 return redirect(next_url)
             else:
-                return redirect('profile:categories')
+                return redirect('profile:equipment')
             # next = request.POST.get('next', '/')
             # return HttpResponseRedirect(next)
             # return redirect('profile:equipment')
@@ -263,7 +268,7 @@ def edit_equipment(request, id):
         form = EquipmentForm(request.POST, instance=equipment)
         if form.is_valid():
             form.save()
-            return redirect('profile:equipments')
+            return redirect('profile:equipment')
     else:
         form = EquipmentForm(instance=equipment)
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
@@ -273,31 +278,108 @@ def delete_equipment(request, id):
     equipment = Equipment.objects.get(id=id)
     if request.method == 'POST':
         equipment.delete()
-        return redirect('profile:equipments')
+        return redirect('profile:equipment')
     return render(request, 'farmersapp/equipment/equipments.html', {'equipment': equipment})
 
+#################### Incomes ####################
+def income(request):
+    if request.method == 'GET':
+        user_incomes = Income.objects.filter(user=request.user)
+        return render(request, 'farmersapp/inex/income.html', {'incomes': user_incomes})
+    else:
+        form = IncomeForm()
+    return render(request, 'farmersapp/inex/income.html', {'form': form})
 
 def create_income(request):
     if request.method == 'POST':
         form = IncomeForm(request.POST)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
         if form.is_valid():
-            form.save()
-            return redirect('profile:incomes')
+            income = form.save(commit=False)
+            income.user = request.user
+            income.save()
+            form.save_m2m()
+            messages.success(request, 'Fields added successfully')
+            next_url = request.POST.get('next', '/')
+            if next_url: 
+                return HttpResponseRedirect(next_url)  
+            else:
+                return redirect('profile:income')
     else:
         form = IncomeForm()
-    return render(request, 'farmersapp/income_form.html', {'form': form})
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+    return render(request, 'farmersapp/inex/in_form.html', {'form': form})
+
+def edit_income(request, id):
+    income = Income.objects.get(id=id)
+    if request.method == 'POST':
+        form = IncomeForm(request.POST, instance=income)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile:income')
+    else:
+        form = IncomeForm(instance=income)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+    return render(request, 'farmersapp/income/edit_income.html', {'form': form})
+
+def delete_income(request, id):
+    income = Income.objects.get(id=id)
+    if request.method == 'POST':
+        income.delete()
+        return redirect('profile:income')
+    return render(request, 'farmersapp/income/income.html', {'income': income})
+
+#################### Expenses ####################
+def expense(request):
+    if request.method == 'GET':
+        user_expenses = Expense.objects.filter(user=request.user)
+        return render(request, 'farmersapp/inex/expense.html', {'expenses': user_expenses})
+    else:
+        form = ExpenseForm()
+    return render(request, 'farmersapp/inex/expense.html', {'form': form})
+
 
 def create_expense(request):
     if request.method == 'POST':
         form = ExpenseForm(request.POST)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
         if form.is_valid():
-            form.save()
-            return redirect('profile:expenses')
+            expense = form.save(commit=False)
+            expense.user = request.user
+            expense.save()
+            form.save_m2m()
+            messages.success(request, 'Fields added successfully')
+            next_url = request.POST.get('next', '/')
+            if next_url: 
+                return HttpResponseRedirect(next_url)  
+            else:   
+                return redirect('profile:expense')
     else:
         form = ExpenseForm()
-    return render(request, 'farmersapp/expense_form.html', {'form': form})
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+    return render(request, 'farmersapp/inex/in_form.html', {'form': form})
 
+def edit_expense(request, id):  
+    expense = Expense.objects.get(id=id)
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST, instance=expense)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile:expense')
+    else:
+        form = ExpenseForm(instance=expense)
+    return render(request, 'farmersapp/inex/edit_income.html', {'form': form})
+    
+def delete_expense(request, id):
+    expense = Expense.objects.get(id=id)
+    if request.method == 'POST':
+        expense.delete()
+        return redirect('profile:expense')
+    return render(request, 'farmersapp/inex/expense.html', {'expense': expense})
 
+#################### Livestock ####################
 def livestock(request):
     if request.method == 'GET':
         user_livestock = Livestock.objects.filter(user=request.user)
@@ -308,10 +390,10 @@ def livestock(request):
         
     return render(request, 'farmersapp/livestock/livestock.html', {'form': form})
 
-
 def create_livestock(request):
     if request.method == 'POST':
         form = LivestockForm(request.POST)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
         if form.is_valid():
             lvst = form.save(commit=False)
             lvst.user = request.user
@@ -321,7 +403,7 @@ def create_livestock(request):
             if next_url:
                 return redirect(next_url)   
             else:
-                return redirect('profile:categories')
+                return redirect('profile:livestock')
     else:
         form = LivestockForm()
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
@@ -331,6 +413,7 @@ def edit_livestock(request, id):
     livestock = Livestock.objects.get(id=id)
     if request.method == 'POST':
         form = LivestockForm(request.POST, instance=livestock)
+        form.fields['categories'].queryset = Category.objects.filter(user=request.user)
         if form.is_valid():
             lvst = form.save(commit=False)
             lvst.user = request.user
@@ -349,6 +432,8 @@ def delete_livestock(request, id):
         return redirect('profile:livestock')
     return render(request, 'farmersapp/livestock/livestock.html', {'livestock': livestock})
 
+
+#################### Weather ####################
 def get_lat_lng(city_name):
     # https://openweathermap.org/api/geocoding-api
     API_KEY = 'cab5bb60507cace9c1291861909cf334'
@@ -357,7 +442,6 @@ def get_lat_lng(city_name):
     response = requests.get(f'http://api.openweathermap.org/geo/1.0/direct?q={city_name}&limit={limit}&appid={API_KEY}')
     data = response.json()
     return data[0]['lon'], data[0]['lat'], data[0]['name']
-
 class Update_weather:
     API_KEY = 'b5fc99d5de9b9472ce9bd0f9a7a533db'
     lat, lon, name =  get_lat_lng('zaqatala')
