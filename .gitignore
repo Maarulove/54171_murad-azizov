@@ -1,0 +1,49 @@
+# ../farmers/__init__.py
+# ../farmers/__pycache__/__init__.cpython-310.pyc
+# ..farmers/__pycache__/settings.cpython-310.pyc
+# ../farmers/__pycache__/urls.cpython-310.pyc
+# ../farmers/__pycache__/wsgi.cpython-310.pyc
+__init__
+__pycache__
+mdl.py
+migrations
+../__init__
+__init__.py
+./__pycache__/
+../__init__.py
+2136_kool_form_pack/
+basend/
+farmers/__init__.py
+farmers/__pycache__/
+logfile.log
+static/
+
+2136_kool_form_pack/
+accounts/__pycache__/__init__.cpython-312.pyc
+accounts/__pycache__/admin.cpython-312.pyc
+accounts/__pycache__/apps.cpython-312.pyc
+accounts/__pycache__/forms.cpython-312.pyc
+accounts/__pycache__/models.cpython-312.pyc
+accounts/__pycache__/serializer.cpython-312.pyc
+accounts/__pycache__/signals.cpython-312.pyc
+accounts/__pycache__/tests.cpython-312.pyc
+accounts/__pycache__/token.cpython-312.pyc
+accounts/__pycache__/urls.cpython-312.pyc
+accounts/__pycache__/views.cpython-312.pyc
+accounts/migrations/0001_initial.py
+accounts/migrations/0002_delete_profile.py
+accounts/migrations/0003_initial.py
+accounts/migrations/__pycache__/0001_initial.cpython-312.pyc
+accounts/migrations/__pycache__/0002_delete_profile.cpython-312.pyc
+accounts/migrations/__pycache__/0003_initial.cpython-312.pyc
+accounts/migrations/__pycache__/__init__.cpython-312.pyc
+accounts/templatesss/
+basend/
+farmers/__init__.py
+farmers/__pycache__/
+logfile.log
+logfile_error.log
+logfile_warning.log
+static/
+testapp/
+  .gitignore
