@@ -10,6 +10,3 @@ urlpatterns = [
     path('profile/', farmersapp_views.home, name='home'),
 
 ]
-
-""" URL Configuration for core auth
-"""
