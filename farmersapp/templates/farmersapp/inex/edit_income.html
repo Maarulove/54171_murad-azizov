@@ -1,0 +1,14 @@
+{% extends 'farmersapp/index.html' %}
+
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'farmersapp/css/style.css' %}">
+
+    <h1 >Edit</h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" value="Submit">
+    </form>
+{% endblock %}

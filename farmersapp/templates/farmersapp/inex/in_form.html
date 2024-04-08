@@ -1,0 +1,46 @@
+<!-- <!DOCTYPE html> -->
+
+{% block content %}
+<html>
+<head>
+    <title>Form</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'farmersapp/css/style.css' %}">
+
+</head>
+<body >
+
+    <h1  class="my_areas_cl">Form</h1>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    
+    <form action="" method="POST" class="form_area">
+        <!-- Add your form fields here -->
+        {% csrf_token %}
+
+        <label for=""" class="label_area">amount:</label>
+        {{ form.amount}}
+        <br>
+        <label for="id_name" class="label_area">description:</label>
+        {{ form.description }}
+        <br>
+        <label for="id_price" class="label_area">Date:</label>
+        {{ form.create_date}}
+        <br>
+        
+        <label for="id_square" class="label_area">Category:</label>
+        {{ form.categories}}
+        <a href="{% url 'profile:category_new' %}?next={{ request.path|urlencode }}">➕</a>
+        <br>
+        <br>
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+        <input type="submit" value="Submit">
+    </form>
+    {% endblock %}
+</body>
+</html>

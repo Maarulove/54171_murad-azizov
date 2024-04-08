@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('farmersapp.urls')),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('profile/', include('farmersapp.urls', namespace='profile')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('select2/', include('django_select2.urls')),
+    
 ]
