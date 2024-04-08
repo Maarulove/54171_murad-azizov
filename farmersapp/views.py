@@ -321,7 +321,7 @@ def edit_income(request, id):
     else:
         form = IncomeForm(instance=income)
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
-    return render(request, 'farmersapp/income/edit_income.html', {'form': form})
+    return render(request, 'farmersapp/inex/edit_income.html', {'form': form})
 
 def delete_income(request, id):
     income = Income.objects.get(id=id)

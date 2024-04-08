@@ -9,6 +9,7 @@ class Users(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
     phone = models.CharField(max_length=20)
     avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    is_email_confirmed = models.BooleanField(default=False)
 
     def __str__(self) -> str:   
         return f"{self.user.username}"
@@ -69,6 +70,8 @@ class Income(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     categories = models.ManyToManyField(Category, blank=True)
 
+
+
 class Expense(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
     description = models.TextField(blank=True, null=True)
@@ -76,9 +79,6 @@ class Expense(models.Model):
     create_date = models.DateTimeField(auto_now_add=True)
     categories = models.ManyToManyField(Category, blank=True)
 
-    def __str__(self):
-        return f"Expense {self.id}"
-    
 
 class Area(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)

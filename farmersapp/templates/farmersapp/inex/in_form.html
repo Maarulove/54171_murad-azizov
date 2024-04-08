@@ -3,14 +3,14 @@
 {% block content %}
 <html>
 <head>
-    <title>Area Form</title>
+    <title>Form</title>
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'farmersapp/css/style.css' %}">
 
 </head>
 <body >
 
-    <h1  class="my_areas_cl">Area Form</h1>
+    <h1  class="my_areas_cl">Form</h1>
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
@@ -23,24 +23,20 @@
         <!-- Add your form fields here -->
         {% csrf_token %}
 
-        <label for=""" class="label_area">Location:</label>
-        {{ form.location }}
+        <label for=""" class="label_area">amount:</label>
+        {{ form.amount}}
         <br>
-        <label for="id_name" class="label_area">Name:</label>
-        {{ form.name }}
+        <label for="id_name" class="label_area">description:</label>
+        {{ form.description }}
         <br>
-        <label for="id_square" class="label_area">Square:</label>
-        {{ form.square }}
+        <label for="id_price" class="label_area">Date:</label>
+        {{ form.create_date}}
         <br>
-        <label for="id_price" class="label_area">Price:</label>
-        {{ form.price }}
-        <br>
-        <label for="id_categories" class="label_area">Categories:</label>
-        {{ form.categories }}
+        
+        <label for="id_square" class="label_area">Category:</label>
+        {{ form.categories}}
         <a href="{% url 'profile:category_new' %}?next={{ request.path|urlencode }}">➕</a>
         <br>
-        <label for="id_description" class="label_area">Description:</label>
-        {{ form.description }}
         <br>
         <input type="hidden" name="next" value="{{ request.GET.next }}">
         <input type="submit" value="Submit">
