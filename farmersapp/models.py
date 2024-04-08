@@ -28,6 +28,13 @@ class Users(models.Model):
             img.save(self.avatar.path)
 
 
+
+
+
+
+
+
+
     
 class Farm(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, default=None)

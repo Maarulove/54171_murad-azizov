@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'accounts',
     'rest_framework',
     'django_select2',
+    'django_rest_resetpassword',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,3 +134,5 @@ LOGIN_URL = 'profile:login'  # Adjust the URL name as per your actual URL patter
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

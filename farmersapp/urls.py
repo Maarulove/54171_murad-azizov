@@ -1,15 +1,18 @@
 from django.urls import path
 from . import views
-from accounts import views as accounts_views 
+# from accounts import views as accounts_views 
+from django.urls import re_path
+
+from accounts.views import reset_password_request_token, reset_password_confirm, reset_password_validate_token, signup, login_view, logout_view
 app_name = "profile"
 urlpatterns = [
     
     # path("accounts/", views.login_view, name="login" ),
     path("farmersapphome/", views.home, name="home"),
     path("", views.home, name="home"),
-    path("logout/", accounts_views.logout_view, name="logout"),
-    path("login/", accounts_views.login_view, name="login"),
-    path("register/", accounts_views.signup, name="register"),
+    path("logout/", logout_view, name="logout"),
+    path("login/", login_view, name="login"),
+    path("register/", signup, name="register"),
     
     path("categories/", views.categories, name="categories"),
     path("category_new/", views.create_category, name="category_new"),
@@ -42,4 +45,9 @@ urlpatterns = [
     path("delete_expense/<int:id>/", views.delete_expense, name="delete_expense"),
 
     path("weather/", views.Update_weather, name="weather"),
-]
+
+
+    path('validate_token/', reset_password_validate_token, name="reset-password-validate"),
+    path('confirm/', reset_password_confirm, name="reset-password-confirm"),
+    path('', reset_password_request_token, name="reset-password-request"),
+    ]
