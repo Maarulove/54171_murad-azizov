@@ -1,10 +1,14 @@
 from django.urls import path
 from . import views
 # from accounts import views as accounts_views 
-from django.urls import re_path
+from django.urls import re_path, reverse_lazy
+from django.contrib.auth import views as auth_views
 
-# from accounts.views import reset_password_request_token, reset_password_confirm, reset_password_validate_token, signup, login_view, logout_view
 from accounts.views import signup, login_view, logout_view
+
+
+
+
 app_name = "profile"
 urlpatterns = [
     
@@ -13,7 +17,29 @@ urlpatterns = [
     path("", views.home, name="home"),
     path("logout/", logout_view, name="logout"),
     path("login/", login_view, name="login"),
-    path("register/", signup, name="register"),
+    path("register/", signup, name="signup"),
+
+    path('password_reset/', auth_views.PasswordResetView.as_view(
+      template_name='farmersapp/registr/password_reset.html',
+      email_template_name = 'farmersapp/registr/password_reset_email.html',
+      success_url = reverse_lazy("profile:password_reset_donee")),
+      name='password_reset'), 
+
+    path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(
+        template_name='farmersapp/registr/password_reset_done.html'),
+          name='password_reset_donee'),
+
+
+    path('password-reset-confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(
+        template_name='farmersapp/registr/password_reset_form.html',
+         success_url = reverse_lazy("profile:password_reset_complete")),
+         name='password_reset_confirm'),
+
+
+    path('reset/done/', auth_views.PasswordResetCompleteView.as_view(
+        template_name='farmersapp/registr/password_reset_complete.html'), 
+        name='password_reset_complete'),
+
     
     path("categories/", views.categories, name="categories"),
     path("category_new/", views.create_category, name="category_new"),
@@ -47,8 +73,4 @@ urlpatterns = [
 
     path("weather/", views.Update_weather, name="weather"),
 
-
-    # path('validate_token/', reset_password_validate_token, name="reset-password-validate"),
-    # path('confirm/', reset_password_confirm, name="reset-password-confirm"),
-    # path('', reset_password_request_token, name="reset-password-request"),
     ]

@@ -1,7 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Users, Category, Income, Expense, Area, Livestock, Equipment, Login
-from django_select2.forms import ModelSelect2MultipleWidget, Select2MultipleWidget
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 
