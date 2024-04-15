@@ -8,7 +8,7 @@ from PIL import Image
 class Users(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=None)
     phone = models.CharField(max_length=20)
-    avatar = models.ImageField(default='default.jpg', upload_to='profile_images')
+    # avatar = models.ImageField(default='default.jpg', upload_to='profile_images', null=True, blank=True)
     is_email_confirmed = models.BooleanField(default=False)
 
     def __str__(self) -> str:   
@@ -17,15 +17,6 @@ class Users(models.Model):
     def __repr__(self) -> str:
         return self.__str__()   
     
-    def save(self, *args, **kwargs):
-        super().save()
-    
-        img = Image.open(self.avatar.path)
-
-        if img.height > 100 or img.width > 100:
-            new_img = (100, 100)
-            img.thumbnail(new_img)
-            img.save(self.avatar.path)
 
 
 

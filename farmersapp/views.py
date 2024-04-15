@@ -59,7 +59,7 @@ def home(request):
 
 @login_required
 def get_users(request):
-    logger.info('Getting all users started')
+    # logger.info('Getting all users started')
     if request.method == 'GET':
         all_users = Users.objects.all()
         return render(request, 'farmersapp/users.html', {'users': all_users})
@@ -81,16 +81,16 @@ def get_users(request):
 #     return render(request, 'farmersapp/users.html', {'form': form, 'users': enumerate(all_users)})
 @login_required
 def register(request):
-    logger.info('Creating a new user started')
+    # logger.info('Creating a new user started')
     if request.method == "POST":
-        logger.info('Creating a new user if block started')
+        # logger.info('Creating a new user if block started')
         form = UserForm(request.POST)
         if form.is_valid():
             logger.info('User Form is valid')
             form.save()
             return redirect('profile:login')
     else:
-        logger.info('Creating a new user else block started')
+        # logger.info('Creating a new user else block started')
         form = UserForm()
      
     all_users = Users.objects.all()
@@ -112,7 +112,7 @@ def register(request):
 #################### Areas ####################
 @login_required
 def my_areas(request):
-    logger.info('Getting areas for current user started')
+    # logger.info('Getting areas for current user started')
     if request.method == 'GET':
         current_user_areas = Area.objects.filter(user=request.user)
         return render(request, 'farmersapp/areas/my_areas.html', {'areas': current_user_areas})
@@ -125,10 +125,7 @@ def create_area(request):
     if request.method == 'POST':
         form = AreaForm(request.POST)
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
-        logger.info('Creating a new area started')
-        logger.info(form.errors)
         if form.is_valid():
-            logger.info('Area Form is valid')
             area = form.save(commit=False)
             area.user = request.user 
             area.save()
@@ -139,9 +136,10 @@ def create_area(request):
                 return HttpResponseRedirect(next_url)  
             else:
                 return redirect('profile:my_areas')
-        else:
-            logger.error('Form is not valid')
+        # else:
+        #     # logger.error('Form is not valid')
     else:
+
         form = AreaForm()
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
     return render(request, 'farmersapp/areas/area_form.html', {'form': form})
@@ -193,13 +191,10 @@ def create_category(request):
             category.save()
             form.save_m2m()
             next_url = request.GET.get('next', None)
-            logger.info(next_url)
             if next_url:
                 return redirect(next_url)
             else:
                 return redirect('profile:categories')
-        else:
-            logger.error('Form is not valid')
     else:
         next_url = request.GET.get('next', None)
 
@@ -254,9 +249,6 @@ def create_equipment(request):
                 return redirect(next_url)
             else:
                 return redirect('profile:equipment')
-            # next = request.POST.get('next', '/')
-            # return HttpResponseRedirect(next)
-            # return redirect('profile:equipment')
     else:
         form = EquipmentForm()
         form.fields['categories'].queryset = Category.objects.filter(user=request.user)
@@ -457,8 +449,8 @@ class Update_weather:
     precipitation = data['current']['weather'][0]['description']
     name = name
     
-    weather = Weather(temperature=temperature, precipitation=precipitation, summary=summary, icon=icon)
-    weather.save()
+    # weather = Weather(temperature=temperature, precipitation=precipitation, summary=summary, icon=icon)
+    # weather.save()
 
 
 def polygon_area():

@@ -44,21 +44,22 @@
         <link href='{% static "farmersapp/css/tooplate-kool-form-pack.css"%}' rel="stylesheet">
 
 
-
-
     </head>
-    <body>
+    {% if messages %}
+    <div class="messages" style="color: antiquewhite;">
+        {% for message in messages %}
+        <div class="message">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
 
+    <body>
         <main>
             <section class="hero-section d-flex justify-content-center align-items-center">
-                {% csrf_token %}
-
-                
                 <div class="container">
                     <div class="row">
-
                         <div class="col-lg-6 col-12 mx-auto">
-                            <form class="custom-form" role="form" method="post">
+                            <form class="custom-form" role="form" method="POST">
                                 {% csrf_token %}
 
                                 <h2 class="hero-title text-center mb-4 pb-2">Sign-in</h2>
@@ -92,14 +93,17 @@
                                     <div class="row justify-content-center align-items-center">
                                         <div class="col-lg-5 col-md-5 col-5 ms-auto">
                                             <button type="submit" class="form-control">
-                                                {% csrf_token %}
                                                 Submit
                                             </button>
                                         </div>
 
                                         <div class="col-lg-6 col-md-6 col-7">
 
-                                            <p class="mb-0">Don't have an account? <a href="{% url 'accounts:signup' %}" class="ms-2"> Sing-up </a></p>
+                                            <p class="mb-0">Don't have an account? <a href="{% url 'profile:signup' %}" class="ms-2"> Sing-up </a></p>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-7">
+
+                                            <p class="mb-0">Forget password?<a href="{% url 'profile:password_reset' %}" class="ms-2"> Forget password? </a></p>
                                         </div>
                                     </div>
                                 </div>

@@ -4,7 +4,7 @@ from .models import *
 # Register your models here.
 @admin.register(Users)
 class AdminUser(admin.ModelAdmin):
-    list_display = ['user', 'phone', 'avatar']
+    list_display = ['user', 'phone']
     list_per_page = 100
 
     fieldsets = [

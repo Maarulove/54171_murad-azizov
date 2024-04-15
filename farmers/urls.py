@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,17 +28,8 @@ urlpatterns = [
     path('profile/', include('farmersapp.urls', namespace='profile')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('select2/', include('django_select2.urls')),
+
     
-    path('accounts/password-reset/', include('accounts.urls', namespace='profile')),
-    path('admin/', admin.site.urls),
 ]
-
-# """ Tests App URL Config """
-# from django.conf.urls import url, include
-# from django.contrib import admin
-
-
-# urlpatterns = [
-#     url(r'^api/password_reset/', include('django_rest_resetpassword.urls', namespace='password_reset')),
-#     url(r'^admin/', admin.site.urls),
-# ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
